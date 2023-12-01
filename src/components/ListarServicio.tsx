@@ -2,48 +2,41 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { baseURL } from '../utils/Constans';
 
-interface Servicio {
-    id: number;
+interface Pokemon {
     name: string;
-    descripcion: string;
-    // Otras propiedades del servicio...
+    // Otras propiedades del Pokémon...
 }
 
 const ListarServicio: React.FC = () => {
-    const [servicios, setServicios] = useState<Servicio[]>([]);
+    const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
     useEffect(() => {
-        const fetchServicios = async () => {
+        const fetchPokemons = async () => {
             try {
-                const response = await axios.get<any>(`${baseURL}/servicios`);
+                const response = await axios.get<any>(`${baseURL}/pokemon?limit=150&offset=0`);
                 console.log('Respuesta de la API:', response.data); // Verifica la estructura de la respuesta
 
-                const serviciosData = Array.isArray(response.data.servicios) ? response.data.servicios : [];
-                setServicios(serviciosData);
+                const pokemonsData = response.data.results || [];
+                setPokemons(pokemonsData);
             } catch (error) {
-                console.error('Error al obtener los servicios:', error);
+                console.error('Error al obtener los Pokémon:', error);
             }
         };
 
-        fetchServicios();
+        fetchPokemons();
     }, []);
 
     return (
         <div>
-            <h2>Listado de Servicios</h2>
-            {servicios.length === 0 ? (
-                <p>No hay servicios disponibles</p>
-            ) : (
-                <ul>
-                    {servicios.map((servicio) => (
-                        <li key={servicio.id}>
-                            <h3>{servicio.name}</h3>
-                            <p>{servicio.descripcion}</p>
-                            {/* Mostrar otras propiedades del servicio si es necesario */}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <h2>Listado de Pokémon</h2>
+            <ul>
+                {pokemons.map((pokemon, index) => (
+                    <li key={index}>
+                        <p>{pokemon.name}</p>
+                        {/* Mostrar otras propiedades del Pokémon si es necesario */}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
