@@ -1,4 +1,3 @@
-  import './App.css';
 import React, { useState } from 'react';
 import FormCaptura from './components/FormCaptura';
 import FormPintar from './components/FormPintar';
